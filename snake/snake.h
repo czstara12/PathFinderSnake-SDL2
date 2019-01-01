@@ -1,18 +1,18 @@
-#pragma once
+ï»¿#pragma once
 #ifndef SNAKE_H
 #define SNAKE_H
 #include <stdlib.h>
 #include <time.h>
 #include <SDL.h>
 
-#define WIDTH 25
-#define HEIGHT 25//³¤¿í
+#define WIDTH 30
+#define HEIGHT 30//é•¿å®½
 
-enum Direction { d_up, d_down, d_left, d_right ,d_error}; // ·½Ïò
+enum Direction { d_up, d_down, d_left, d_right ,d_error}; // æ–¹å‘
 
-void display();                 // ÏÔÊ¾
-int move(int x, int y);//ÉßµÄÒÆ¶¯
-void newfood();//Ë¢ĞÂÊ³Îï
+void display();                 // æ˜¾ç¤º
+int move(int x, int y);//è›‡çš„ç§»åŠ¨
+void newfood();//åˆ·æ–°é£Ÿç‰©
 int initialize();
 int game();
 int gamewithai();

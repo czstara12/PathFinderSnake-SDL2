@@ -1,6 +1,2 @@
 ﻿  AI.cpp
-d:\documents\github\snake\snake\ai.cpp(110): warning C4101: “dire”: 未引用的局部变量
-  main.cpp
-  snake.cpp
-  正在生成代码...
   snake.vcxproj -> D:\Documents\GitHub\snake\Debug\snake.exe

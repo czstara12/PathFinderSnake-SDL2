@@ -1,4 +1,4 @@
-#include "snake.h"
+﻿#include "snake.h"
 #include <stdlib.h>
 #include <time.h>
 #include <SDL.h>
