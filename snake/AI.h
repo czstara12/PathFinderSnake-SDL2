@@ -15,3 +15,7 @@ int simulate(const short map[][WIDTH]
 Direction ai2(short const map[][WIDTH]//地图
 	, short size//蛇长
 	, short x, short y);
+int simulate2(const short map[][WIDTH]
+	, DFSmap * p_start
+	, short size
+	, short x, short y);

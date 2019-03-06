@@ -2,13 +2,14 @@
 #include "AI.h"
 
 
+
 Direction ai(short const map[][WIDTH]//地图
 	, short size//蛇长
 	, short x, short y//蛇头坐标
 	, int qiantao
 )
 {
-	if (qiantao == 0) {
+	if (qiantao == 0 || qiantao == 2) {
 		int waynum = 0;
 		if (map[y - 1][x] == 0 || map[y - 1][x] == 1 || map[y - 1][x] == -1)waynum++;
 		if (map[y][x - 1] == 0 || map[y][x - 1] == 1 || map[y][x - 1] == -1)waynum++;
@@ -117,7 +118,7 @@ Direction ai(short const map[][WIDTH]//地图
 	//	else if (p_start->s == true)return d_down;
 	//	else if (p_start->d == true)return d_right;
 
-	if (qiantao == 1)//模拟函数用来判断模拟情况 防止反复归递
+	if (qiantao == 1 || qiantao == 2)//模拟函数用来判断模拟情况 防止反复归递
 	{
 		if (p_start->w == true)return d_up;
 		else if (p_start->a == true)return d_left;
@@ -125,17 +126,18 @@ Direction ai(short const map[][WIDTH]//地图
 		else if (p_start->d == true)return d_right;
 	}
 	else if (num == 0) {//没有搜索到直接路径 食物生成在蛇圈以外
-		//MessageBox(NULL, "没路了1", "error", MB_OK);
-		//return d_error;
 		return ai2(map, size, x, y);
 	}
-	else if (simulate(map, p_start, size, x, y) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
+	else if (size > (HEIGHT-1)*(WIDTH-1) * 95 / 100)
 	{
-		//MessageBox(NULL, "没路了2", "error", MB_OK);
-		//if (p_start->w == true)return d_up;
-		//else if (p_start->a == true)return d_left;
-		//else if (p_start->s == true)return d_down;
-		//else if (p_start->d == true)return d_right;
+		int foodx=0, foody=0;
+		for(foodx=0;map[foody][foodx]!=-1;foodx++)
+			for (foody = 0; map[foody][foodx] != -1; foody++)
+		return ai2(map, size, foodx, foody);
+	}
+	else if ((rand()%2==0?simulate(map, p_start, size, x, y):simulate2(map, p_start, size, x, y)) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
+	{
+
 		return ai2(map, size, x, y);
 	}
 	else//剩的就是既能找到又安全的路了
@@ -246,7 +248,7 @@ Direction ai2(short const map[][WIDTH]//地图
 				}
 			}
 	} while (num != 0);
-	Direction retdir = d_error;
+	//Direction retdir = d_error;
 	if (ai2map[y - 1][x] >= ai2map[y][x - 1] && ai2map[y - 1][x] != -1)//1
 	{
 		if (ai2map[y - 1][x] >= ai2map[y + 1][x])//1
@@ -283,4 +285,75 @@ Direction ai2(short const map[][WIDTH]//地图
 		}
 	}
 	return d_error;
+}
+
+int simulate2(const short map[][WIDTH]
+	, DFSmap * p_start
+	, short size
+	, short x, short y)
+{
+	short vir_map[HEIGHT][WIDTH];// endx, endy;
+	for (int h = 0; h < HEIGHT; h++)
+		for (int w = 0; w < WIDTH; w++)
+			vir_map[h][w] = map[h][w];
+	//Direction dire;
+	//short * pv = &vir_map[y][x];
+	while (1)
+	{
+		switch (ai(vir_map, size, x, y, 2))
+		{
+		case d_up:
+			y = y - 1;
+			break;
+		case d_down:
+				y = y + 1;
+			break;
+		case d_left:
+				x = x - 1;
+			break;
+		case d_right:
+				x = x + 1;
+			break;
+		case d_error:
+			exit(1);
+		}
+		if (vir_map[y][x] == 0 || vir_map[y][x] == 1) {
+			vir_map[y][x] = size + 1;
+			for (int a = 0; a < HEIGHT; a++)
+				for (int b = 0; b < HEIGHT; b++)
+					vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
+		}
+		else if (vir_map[y][x] == -1) {
+			size++;
+			vir_map[y][x] = size;
+			break;
+		}
+
+		//if (*pv != -1)
+		//{
+		//	*pv = size + 1;
+		//	for (int a = 0; a < HEIGHT; a++)
+		//		for (int b = 0; b < HEIGHT; b++)
+		//			vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
+		//}
+		//else
+		//{
+		//	*pv = size + 1;
+		//	break;
+		//}
+	}//模拟走一遍
+	//for (short h = 0; h < HEIGHT; h++)
+	//	for (short w = 0; w < WIDTH; w++)
+	//		if (vir_map[h][w] == 1)
+	//		{
+	//			endx = w;
+	//			endy = h;
+	//			h = HEIGHT;
+	//			w = WIDTH;
+	//		}
+	if (ai(vir_map, size , x, y, 1) != d_error)
+		return 1;
+	else
+		return 0;
+	return 0;
 }
