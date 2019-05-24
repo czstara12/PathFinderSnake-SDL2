@@ -1,13 +1,11 @@
-﻿#include "snake.h"
-#include "AI.h"
-
-
+﻿#include "AI.h"
 
 Direction ai(short const map[][WIDTH]//地图
 	, short size//蛇长
 	, short x, short y//蛇头坐标
 	, int qiantao
 )
+
 {
 	if (qiantao == 0 || qiantao == 2) {
 		int waynum = 0;
@@ -31,8 +29,16 @@ Direction ai(short const map[][WIDTH]//地图
 		//if (size > (WIDTH - 2)*(HEIGHT - 2)*0.95)
 		//	return ai2(map, size, x, y);
 	}
+	/*if (size > (HEIGHT - 2)*(WIDTH - 2) * 95 / 100)
+	{
+		int foodx = 0, foody = 0;
+		for (foodx = 0; map[foody][foodx] != -1; foodx++)
+			for (foody = 0; map[foody][foodx] != -1; foody++)
+				return ai2(map, size, foodx, foody);
+	}*/
+	
 	DFSmap dmap[HEIGHT][WIDTH];
-	DFSmap * p_start;
+	DFSmap * p_start = NULL;
 
 	short const * pa;
 	DFSmap * pb;
@@ -60,6 +66,11 @@ Direction ai(short const map[][WIDTH]//地图
 	}
 
 	int num = 1;
+	if (p_start == NULL)
+	{
+		std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
+		exit(-1);
+	}
 	while (p_start->sign == false && num != 0)
 	{
 		num = 0;
@@ -128,14 +139,7 @@ Direction ai(short const map[][WIDTH]//地图
 	else if (num == 0) {//没有搜索到直接路径 食物生成在蛇圈以外
 		return ai2(map, size, x, y);
 	}
-	else if (size > (HEIGHT-1)*(WIDTH-1) * 95 / 100)
-	{
-		int foodx=0, foody=0;
-		for(foodx=0;map[foody][foodx]!=-1;foodx++)
-			for (foody = 0; map[foody][foodx] != -1; foody++)
-		return ai2(map, size, foodx, foody);
-	}
-	else if ((rand()%2==0?simulate(map, p_start, size, x, y):simulate2(map, p_start, size, x, y)) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
+	else  if ((rand()%2==0?simulate(map, p_start, size, x, y):simulate2(map, p_start, size, x, y)) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
 	{
 
 		return ai2(map, size, x, y);
@@ -240,9 +244,13 @@ Direction ai2(short const map[][WIDTH]//地图
 			{
 				if (ai2map[he][wi] == count)
 				{
+					if(he > 0 )//这四个判断条件正常情况下不会失败 加它是为了去掉警告
 					ai2map[he - 1][wi] = ai2map[he - 1][wi] == 0 ? count + 1 : ai2map[he - 1][wi];
+					if(wi > 0 )
 					ai2map[he][wi - 1] = ai2map[he][wi - 1] == 0 ? count + 1 : ai2map[he][wi - 1];
+					if(wi < WIDTH)
 					ai2map[he][wi + 1] = ai2map[he][wi + 1] == 0 ? count + 1 : ai2map[he][wi + 1];
+					if(he < HEIGHT)
 					ai2map[he + 1][wi] = ai2map[he + 1][wi] == 0 ? count + 1 : ai2map[he + 1][wi];
 					num++;
 				}

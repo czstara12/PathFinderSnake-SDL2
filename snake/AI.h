@@ -1,5 +1,11 @@
 ﻿#pragma once
-#include <Windows.h>
+#ifndef AI_H
+#define AI_H
+
+#include "public.h"
+#include <stdlib.h>
+#include <iostream>
+
 struct DFSmap
 {
 	bool w, s, a, d, sign, active, nopen;
@@ -19,3 +25,5 @@ int simulate2(const short map[][WIDTH]
 	, DFSmap * p_start
 	, short size
 	, short x, short y);
+
+#endif // !AI_H

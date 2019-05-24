@@ -1,11 +1,5 @@
 ﻿// snake.cpp: 定义控制台应用程序的入口点。
-//
 #include "snake.h"
-#include <stdlib.h>
-#include <time.h>
-#include <SDL.h>
-#include "AI.h"
-
 
 short map[HEIGHT][WIDTH] = { 0 }; // 地图
 short size;                     // 蛇的长度
@@ -23,7 +17,7 @@ int banai = 0;//防止死循环
 int initialize()
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);//初始化SDL
-	window = SDL_CreateWindow("snake.by starstory", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);//创建SDL窗口
+	window = SDL_CreateWindow("snake.by starstory", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, HEIGHT * 20, WIDTH * 20 , SDL_WINDOW_SHOWN);//创建SDL窗口
 	srand((unsigned)time(NULL));//初始化随机数
 	mark = clock();//标记时间
 	for (int i = 0; i < WIDTH; i++) {
@@ -49,7 +43,6 @@ int initialize()
 	newfood();//初始化一个食物
 	return 0;
 }
-
 int gamewithai()
 {
 	if ((dire = ai(map, size, x, y, 0)) == d_error)
@@ -90,6 +83,8 @@ int gamewithai()
 	}
 	if (end)return 0;
 	display();
+	
+	
 	if (quit)
 		return 0;
 	//SDL_Delay(10);
@@ -107,7 +102,7 @@ int gamewithai()
 
 int game()
 {
-	if (clock() - mark > CLOCKS_PER_SEC / 4.5) {
+	if (clock() - mark > CLOCKS_PER_SEC * 2 /9) {
 		mark = clock();
 		switch (dire) {
 		case d_up:
@@ -225,6 +220,11 @@ void display() {
 				else
 					SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
 				SDL_RenderFillRect(ren, &rec);
+				if (a < 1 || b < 1)
+				{
+					std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
+					exit(-1);
+				}
 				if (abs(map[a - 1][b] - map[a][b]) == 1 && map[a - 1][b] != 0) {
 					rec.x = b * 20 + 2;
 					rec.y = a * 20;
@@ -267,6 +267,18 @@ void display() {
 	SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
 	SDL_RenderFillRect(ren, &rec);
 	SDL_RenderPresent(ren);
+}
+void displayt()
+{
+	system("cls");
+	for (int a = 0; a < HEIGHT; a++) {
+		for (int b = 0; b < WIDTH; b++) {
+			std::cout.width(4);
+			std::cout << map[a][b];
+		}
+		std::cout << std::endl << std::endl;
+	}
+	Sleep(10);
 }
 void newfood() {//随机一个新的食物
 	int r = rand() % ((WIDTH - 2) * (HEIGHT - 2) - size);
