@@ -1,7 +1,7 @@
 ﻿#include "AI.h"
 
-Direction ai(short const map[][WIDTH]//地图
-	, short size//蛇长
+Direction ai(short const grid[][WIDTH]//地图
+	, short snakeLength//蛇长
 	, short x, short y//蛇头坐标
 	, int qiantao
 )
@@ -9,32 +9,32 @@ Direction ai(short const map[][WIDTH]//地图
 {
 	if (qiantao == 0 || qiantao == 2) {
 		int waynum = 0;
-		if (map[y - 1][x] == 0 || map[y - 1][x] == 1 || map[y - 1][x] == -1)waynum++;
-		if (map[y][x - 1] == 0 || map[y][x - 1] == 1 || map[y][x - 1] == -1)waynum++;
-		if (map[y + 1][x] == 0 || map[y + 1][x] == 1 || map[y + 1][x] == -1)waynum++;
-		if (map[y][x + 1] == 0 || map[y][x + 1] == 1 || map[y][x + 1] == -1)waynum++;
+		if (grid[y - 1][x] == 0 || grid[y - 1][x] == 1 || grid[y - 1][x] == -1)waynum++;
+		if (grid[y][x - 1] == 0 || grid[y][x - 1] == 1 || grid[y][x - 1] == -1)waynum++;
+		if (grid[y + 1][x] == 0 || grid[y + 1][x] == 1 || grid[y + 1][x] == -1)waynum++;
+		if (grid[y][x + 1] == 0 || grid[y][x + 1] == 1 || grid[y][x + 1] == -1)waynum++;
 		if (waynum == 0)return d_error;
 		if (waynum == 1) {
-			if (map[y - 1][x] == 0 || map[y - 1][x] == 1 || map[y - 1][x] == -1)
+			if (grid[y - 1][x] == 0 || grid[y - 1][x] == 1 || grid[y - 1][x] == -1)
 				return d_up;
-			else if (map[y][x - 1] == 0 || map[y][x - 1] == 1 || map[y][x - 1] == -1)
+			else if (grid[y][x - 1] == 0 || grid[y][x - 1] == 1 || grid[y][x - 1] == -1)
 				return d_left;
-			else if (map[y + 1][x] == 0 || map[y + 1][x] == 1 || map[y + 1][x] == -1)
+			else if (grid[y + 1][x] == 0 || grid[y + 1][x] == 1 || grid[y + 1][x] == -1)
 				return d_down;
-			else if (map[y][x + 1] == 0 || map[y][x + 1] == 1 || map[y][x + 1] == -1)
+			else if (grid[y][x + 1] == 0 || grid[y][x + 1] == 1 || grid[y][x + 1] == -1)
 				return d_right;
 			else
 				return d_error;
 		}
-		//if (size > (WIDTH - 2)*(HEIGHT - 2)*0.95)
-		//	return ai2(map, size, x, y);
+		//if (snakeLength > (WIDTH - 2)*(HEIGHT - 2)*0.95)
+		//	return ai2(grid, snakeLength, x, y);
 	}
-	/*if (size > (HEIGHT - 2)*(WIDTH - 2) * 95 / 100)
+	/*if (snakeLength > (HEIGHT - 2)*(WIDTH - 2) * 95 / 100)
 	{
 		int foodx = 0, foody = 0;
-		for (foodx = 0; map[foody][foodx] != -1; foodx++)
-			for (foody = 0; map[foody][foodx] != -1; foody++)
-				return ai2(map, size, foodx, foody);
+		for (foodx = 0; grid[foody][foodx] != -1; foodx++)
+			for (foody = 0; grid[foody][foodx] != -1; foody++)
+				return ai2(grid, snakeLength, foodx, foody);
 	}*/
 	
 	DFSmap dmap[HEIGHT][WIDTH];
@@ -42,7 +42,7 @@ Direction ai(short const map[][WIDTH]//地图
 
 	short const * pa;
 	DFSmap * pb;
-	for (pa = map[0], pb = dmap[0]; pb <= &dmap[HEIGHT - 1][WIDTH - 1]; pa++, pb++)
+	for (pa = grid[0], pb = dmap[0]; pb <= &dmap[HEIGHT - 1][WIDTH - 1]; pa++, pb++)
 	{
 		pb->active = pb->d = pb->nopen = pb->s = pb->sign = pb->w = pb->a = false;
 		if (*pa != 0)
@@ -51,7 +51,7 @@ Direction ai(short const map[][WIDTH]//地图
 				pb->active = true;
 				pb->sign = true;
 			}
-			else if (*pa == size)
+			else if (*pa == snakeLength)
 			{
 				p_start = pb;
 				pb->nopen = false;
@@ -121,7 +121,7 @@ Direction ai(short const map[][WIDTH]//地图
 	//	else if (p_start->s == true)return d_down;
 	//	else if (p_start->d == true)return d_right;
 	//}
-	//else if (simulate(map, p_start, size, x, y) == 0)
+	//else if (simulate(grid, p_start, snakeLength, x, y) == 0)
 	//	MessageBox(NULL, "没路了2", "error", MB_OK);
 	//else
 	//	if (p_start->w == true)return d_up;
@@ -137,12 +137,12 @@ Direction ai(short const map[][WIDTH]//地图
 		else if (p_start->d == true)return d_right;
 	}
 	else if (num == 0) {//没有搜索到直接路径 食物生成在蛇圈以外
-		return ai2(map, size, x, y);
+		return ai2(grid, snakeLength, x, y);
 	}
-	else  if ((rand()%2==0?simulate(map, p_start, size, x, y):simulate2(map, p_start, size, x, y)) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
+	else  if ((rand()%2==0?simulate(grid, p_start, snakeLength, x, y):simulate2(grid, p_start, snakeLength, x, y)) == 0)//这个走法危险 无法追尾 解决方法 以最远的路程追尾
 	{
 
-		return ai2(map, size, x, y);
+		return ai2(grid, snakeLength, x, y);
 	}
 	else//剩的就是既能找到又安全的路了
 		if (p_start->w == true)return d_up;
@@ -152,15 +152,15 @@ Direction ai(short const map[][WIDTH]//地图
 
 	return d_error;
 }
-int simulate(const short map[][WIDTH]
+int simulate(const short grid[][WIDTH]
 	, DFSmap * p_start
-	, short size
+	, short snakeLength
 	, short x, short y)
 {
 	short vir_map[HEIGHT][WIDTH], endx, endy;
 	for (int h = 0; h < HEIGHT; h++)
 		for (int w = 0; w < WIDTH; w++)
-			vir_map[h][w] = map[h][w];
+			vir_map[h][w] = grid[h][w];
 	//Direction dire;
 	DFSmap * pn = p_start;
 	short * pv = &vir_map[y][x];
@@ -188,14 +188,14 @@ int simulate(const short map[][WIDTH]
 		}
 		if (*pv != -1)
 		{
-			*pv = size + 1;
+			*pv = snakeLength + 1;
 			for (int a = 0; a < HEIGHT; a++)
 				for (int b = 0; b < HEIGHT; b++)
 					vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
 		}
 		else
 		{
-			*pv = size + 1;
+			*pv = snakeLength + 1;
 			break;
 		}
 	}//模拟走一遍
@@ -208,7 +208,7 @@ int simulate(const short map[][WIDTH]
 				h = HEIGHT;
 				w = WIDTH;
 			}
-	if (ai(vir_map, size + 1, endx, endy, 1) != d_error)
+	if (ai(vir_map, snakeLength + 1, endx, endy, 1) != d_error)
 		return 1;
 	else
 		return 0;
@@ -217,19 +217,19 @@ int simulate(const short map[][WIDTH]
 
 
 
-Direction ai2(short const map[][WIDTH]//地图
-	, short size//蛇长
+Direction ai2(short const grid[][WIDTH]//地图
+	, short snakeLength//蛇长
 	, short x, short y)
 {
 	short ai2map[HEIGHT][WIDTH];
 	for (int he = 0; he < HEIGHT; he++)
 		for (int wi = 0; wi < WIDTH; wi++)
 		{
-			if (map[he][wi] == 0)
+			if (grid[he][wi] == 0)
 				ai2map[he][wi] = 0;
-			else if (map[he][wi] == 1)
+			else if (grid[he][wi] == 1)
 				ai2map[he][wi] = 1;
-			else if(map[he][wi] == -1)
+			else if(grid[he][wi] == -1)
 				ai2map[he][wi] = 0;
 			else
 				ai2map[he][wi] = -1;
@@ -295,20 +295,20 @@ Direction ai2(short const map[][WIDTH]//地图
 	return d_error;
 }
 
-int simulate2(const short map[][WIDTH]
+int simulate2(const short grid[][WIDTH]
 	, DFSmap * p_start
-	, short size
+	, short snakeLength
 	, short x, short y)
 {
 	short vir_map[HEIGHT][WIDTH];// endx, endy;
 	for (int h = 0; h < HEIGHT; h++)
 		for (int w = 0; w < WIDTH; w++)
-			vir_map[h][w] = map[h][w];
+			vir_map[h][w] = grid[h][w];
 	//Direction dire;
 	//short * pv = &vir_map[y][x];
 	while (1)
 	{
-		switch (ai(vir_map, size, x, y, 2))
+		switch (ai(vir_map, snakeLength, x, y, 2))
 		{
 		case d_up:
 			y = y - 1;
@@ -326,27 +326,27 @@ int simulate2(const short map[][WIDTH]
 			exit(1);
 		}
 		if (vir_map[y][x] == 0 || vir_map[y][x] == 1) {
-			vir_map[y][x] = size + 1;
+			vir_map[y][x] = snakeLength + 1;
 			for (int a = 0; a < HEIGHT; a++)
 				for (int b = 0; b < HEIGHT; b++)
 					vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
 		}
 		else if (vir_map[y][x] == -1) {
-			size++;
-			vir_map[y][x] = size;
+			snakeLength++;
+			vir_map[y][x] = snakeLength;
 			break;
 		}
 
 		//if (*pv != -1)
 		//{
-		//	*pv = size + 1;
+		//	*pv = snakeLength + 1;
 		//	for (int a = 0; a < HEIGHT; a++)
 		//		for (int b = 0; b < HEIGHT; b++)
 		//			vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
 		//}
 		//else
 		//{
-		//	*pv = size + 1;
+		//	*pv = snakeLength + 1;
 		//	break;
 		//}
 	}//模拟走一遍
@@ -359,7 +359,7 @@ int simulate2(const short map[][WIDTH]
 	//			h = HEIGHT;
 	//			w = WIDTH;
 	//		}
-	if (ai(vir_map, size , x, y, 1) != d_error)
+	if (ai(vir_map, snakeLength , x, y, 1) != d_error)
 		return 1;
 	else
 		return 0;

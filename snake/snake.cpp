@@ -1,43 +1,43 @@
 ﻿// snake.cpp: 定义控制台应用程序的入口点。
 #include "snake.h"
 
-short map[HEIGHT][WIDTH] = { 0 }; // 地图
-short size;                     // 蛇的长度
+short grid[HEIGHT][WIDTH] = { 0 }; // 地图
+short snakeLength;                     // 蛇的长度
 Direction dire, diren; // 方向
-short x, y;                     // 蛇头位置
-clock_t mark;                   // 时间标记
-SDL_Renderer *ren;//刷子
-SDL_Rect rec;//框子
+short snakeHeadPosition_x, snakeHeadPosition_y;                     // 蛇头位置
+clock_t lastLoopTime;                   // 时间标记
+SDL_Renderer *renderer;//刷子
+SDL_Rect rect;//框子
 bool end = false;
 bool quit = false;
 SDL_Event event;//事件
 SDL_Window * window;
-int banai = 0;//防止死循环
+int stepsSinceLastFood = 0;//防止死循环
 
 int initialize()
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);//初始化SDL
 	window = SDL_CreateWindow("snake.by starstory", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, HEIGHT * 20, WIDTH * 20 , SDL_WINDOW_SHOWN);//创建SDL窗口
 	srand((unsigned)time(NULL));//初始化随机数
-	mark = clock();//标记时间
+	clock_t lastLoopTime = clock();//标记时间
 	for (int i = 0; i < WIDTH; i++) {
-		map[0][i] = -2;
-		map[HEIGHT - 1][i] = -2;
+		grid[0][i] = -2;
+		grid[HEIGHT - 1][i] = -2;
 	}
 	for (int i = 0; i < HEIGHT; i++) {
-		map[i][0] = -2;
-		map[i][WIDTH - 1] = -2;
+		grid[i][0] = -2;
+		grid[i][WIDTH - 1] = -2;
 	}//占用地图边界
-	ren = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);//刷子绑定窗口
-	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-	SDL_RenderClear(ren);
-	SDL_RenderPresent(ren);//清屏
-	size = 3;
-	x = 3;
-	y = 3;
-	map[3][3] = 3;
-	map[3][2] = 2;
-	map[3][1] = 1;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);//刷子绑定窗口
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);//清屏
+	snakeLength = 3;
+	snakeHeadPosition_x = 3;
+	snakeHeadPosition_y = 3;
+	grid[3][3] = 3;
+	grid[3][2] = 2;
+	grid[3][1] = 1;
 	dire = d_right;
 	diren = d_right;
 	newfood();//初始化一个食物
@@ -45,38 +45,38 @@ int initialize()
 }
 int gamewithai()
 {
-	if ((dire = ai(map, size, x, y, 0)) == d_error)
+	if ((dire = ai(grid, snakeLength, snakeHeadPosition_x, snakeHeadPosition_y, 0)) == d_error)
 	{
-		MessageBox(NULL, "没路了", "error", MB_OK);
+		MessageBoxA(NULL, "没路了", "error", MB_OK);
 		return 0;
 	}
-	if (banai > (WIDTH-2)*(HEIGHT-2)*4)
+	if (stepsSinceLastFood > (WIDTH-2)*(HEIGHT-2)*4)
 	{
-		MessageBox(NULL, "死循环", "error", MB_OK);
+		MessageBoxA(NULL, "死循环", "error", MB_OK);
 		return 0;
 	}
 	switch (dire) {
 	case d_up:
-		if (move(x, y - 1) == 1)
-			y = y - 1;
+		if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y - 1) == 1)
+			snakeHeadPosition_y = snakeHeadPosition_y - 1;
 		else
 			end = true;
 		break;
 	case d_down:
-		if (move(x, y + 1) == 1)
-			y = y + 1;
+		if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y + 1) == 1)
+			snakeHeadPosition_y = snakeHeadPosition_y + 1;
 		else
 			end = true;
 		break;
 	case d_left:
-		if (move(x - 1, y) == 1)
-			x = x - 1;
+		if (moveSnake(snakeHeadPosition_x - 1, snakeHeadPosition_y) == 1)
+			snakeHeadPosition_x = snakeHeadPosition_x - 1;
 		else
 			end = true;
 		break;
 	case d_right:
-		if (move(x + 1, y) == 1)
-			x = x + 1;
+		if (moveSnake(snakeHeadPosition_x + 1, snakeHeadPosition_y) == 1)
+			snakeHeadPosition_x = snakeHeadPosition_x + 1;
 		else
 			end = true;
 		break;
@@ -100,32 +100,32 @@ int gamewithai()
 	return 1;
 }
 
-int game()
+int gameLoop()
 {
-	if (clock() - mark > CLOCKS_PER_SEC * 2 /9) {
-		mark = clock();
+	if (clock() - lastLoopTime > CLOCKS_PER_SEC * 2 /9) {
+		lastLoopTime = clock();
 		switch (dire) {
 		case d_up:
-			if (move(x, y - 1) == 1)
-				y = y - 1;
+			if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y - 1) == 1)
+				snakeHeadPosition_y = snakeHeadPosition_y - 1;
 			else
 				end = true;
 			break;
 		case d_down:
-			if (move(x, y + 1) == 1)
-				y = y + 1;
+			if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y + 1) == 1)
+				snakeHeadPosition_y = snakeHeadPosition_y + 1;
 			else
 				end = true;
 			break;
 		case d_left:
-			if (move(x - 1, y) == 1)
-				x = x - 1;
+			if (moveSnake(snakeHeadPosition_x - 1, snakeHeadPosition_y) == 1)
+				snakeHeadPosition_x = snakeHeadPosition_x - 1;
 			else
 				end = true;
 			break;
 		case d_right:
-			if (move(x + 1, y) == 1)
-				x = x + 1;
+			if (moveSnake(snakeHeadPosition_x + 1, snakeHeadPosition_y) == 1)
+				snakeHeadPosition_x = snakeHeadPosition_x + 1;
 			else
 				end = true;
 			break;
@@ -169,19 +169,19 @@ int game()
 	return 1;
 }
 
-int move(int x, int y) {//蛇头向前进一个格
+int moveSnake(int x, int y) {//蛇头向前进一个格
 	diren = dire;
-	if (map[y][x] == 0|| map[y][x] == 1) {
-		map[y][x] = size + 1;
-		banai++;
+	if (grid[y][x] == 0|| grid[y][x] == 1) {
+		grid[y][x] = snakeLength + 1;
+		stepsSinceLastFood++;
 		for (int a = 0; a < HEIGHT; a++)
 			for (int b = 0; b < HEIGHT; b++)
-				map[a][b] = (map[a][b] > 0 ? map[a][b] - 1 : map[a][b]);
+				grid[a][b] = (grid[a][b] > 0 ? grid[a][b] - 1 : grid[a][b]);
 	}
-	else if (map[y][x] == -1) {
-		size++;
-		map[y][x] = size;
-		banai = 0;
+	else if (grid[y][x] == -1) {
+		snakeLength++;
+		grid[y][x] = snakeLength;
+		stepsSinceLastFood = 0;
 		newfood();
 	}
 	else return 0;
@@ -189,84 +189,84 @@ int move(int x, int y) {//蛇头向前进一个格
 }
 
 void display() {
-	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-	SDL_RenderClear(ren);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
 	for (int a = 0; a < HEIGHT; a++) {
 		for (int b = 0; b < WIDTH; b++) {
-			switch (map[a][b])
+			switch (grid[a][b])
 			{
 			case 0:
 				break;
 			case -1:
-				rec.x = b * 20 + 2;
-				rec.y = a * 20 + 2;
-				rec.h = rec.w = 16;
-				SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-				SDL_RenderFillRect(ren, &rec);
+				rect.x = b * 20 + 2;
+				rect.y = a * 20 + 2;
+				rect.h = rect.w = 16;
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+				SDL_RenderFillRect(renderer, &rect);
 				break;
 			case -2:
-				rec.x = b * 20;
-				rec.y = a * 20;
-				rec.h = rec.w = 20;
-				SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-				SDL_RenderFillRect(ren, &rec);
+				rect.x = b * 20;
+				rect.y = a * 20;
+				rect.h = rect.w = 20;
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+				SDL_RenderFillRect(renderer, &rect);
 				break;
 			default:
-				rec.x = b * 20 + 2;
-				rec.y = a * 20 + 2;
-				rec.h = rec.w = 16;
-				if(size!=map[a][b])
-					SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
+				rect.x = b * 20 + 2;
+				rect.y = a * 20 + 2;
+				rect.h = rect.w = 16;
+				if(snakeLength!=grid[a][b])
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 				else
-					SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
-				SDL_RenderFillRect(ren, &rec);
+					SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+				SDL_RenderFillRect(renderer, &rect);
 				if (a < 1 || b < 1)
 				{
 					std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
 					exit(-1);
 				}
-				if (abs(map[a - 1][b] - map[a][b]) == 1 && map[a - 1][b] != 0) {
-					rec.x = b * 20 + 2;
-					rec.y = a * 20;
-					rec.w = 16;
-					rec.h = 2;
-					SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-					SDL_RenderFillRect(ren, &rec);
+				if (abs(grid[a - 1][b] - grid[a][b]) == 1 && grid[a - 1][b] != 0) {
+					rect.x = b * 20 + 2;
+					rect.y = a * 20;
+					rect.w = 16;
+					rect.h = 2;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+					SDL_RenderFillRect(renderer, &rect);
 				}
-				if (abs(map[a + 1][b] - map[a][b]) == 1 && map[a + 1][b] != 0) {
-					rec.x = b * 20 + 2;
-					rec.y = a * 20 + 18;
-					rec.w = 16;
-					rec.h = 2;
-					SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-					SDL_RenderFillRect(ren, &rec);
+				if (abs(grid[a + 1][b] - grid[a][b]) == 1 && grid[a + 1][b] != 0) {
+					rect.x = b * 20 + 2;
+					rect.y = a * 20 + 18;
+					rect.w = 16;
+					rect.h = 2;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+					SDL_RenderFillRect(renderer, &rect);
 				}
-				if (abs(map[a][b + 1] - map[a][b]) == 1 && map[a][b + 1] != 0) {
-					rec.x = b * 20 + 18;
-					rec.y = a * 20 + 2;
-					rec.w = 2;
-					rec.h = 16;
-					SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-					SDL_RenderFillRect(ren, &rec);
+				if (abs(grid[a][b + 1] - grid[a][b]) == 1 && grid[a][b + 1] != 0) {
+					rect.x = b * 20 + 18;
+					rect.y = a * 20 + 2;
+					rect.w = 2;
+					rect.h = 16;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+					SDL_RenderFillRect(renderer, &rect);
 				}
-				if (abs(map[a][b - 1] - map[a][b]) == 1 && map[a][b - 1] != 0) {
-					rec.x = b * 20;
-					rec.y = a * 20 + 2;
-					rec.w = 2;
-					rec.h = 16;
-					SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-					SDL_RenderFillRect(ren, &rec);
+				if (abs(grid[a][b - 1] - grid[a][b]) == 1 && grid[a][b - 1] != 0) {
+					rect.x = b * 20;
+					rect.y = a * 20 + 2;
+					rect.w = 2;
+					rect.h = 16;
+					SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+					SDL_RenderFillRect(renderer, &rect);
 				}
 				break;
 			}
 		}
 	}
-	rec.x = x * 20 + 2;
-	rec.y = y * 20 + 2;
-	rec.h = rec.w = 16;
-	SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
-	SDL_RenderFillRect(ren, &rec);
-	SDL_RenderPresent(ren);
+	rect.x = snakeHeadPosition_x * 20 + 2;
+	rect.y = snakeHeadPosition_y * 20 + 2;
+	rect.h = rect.w = 16;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderPresent(renderer);
 }
 void displayt()
 {
@@ -274,16 +274,16 @@ void displayt()
 	for (int a = 0; a < HEIGHT; a++) {
 		for (int b = 0; b < WIDTH; b++) {
 			std::cout.width(4);
-			std::cout << map[a][b];
+			std::cout << grid[a][b];
 		}
 		std::cout << std::endl << std::endl;
 	}
 	Sleep(10);
 }
 void newfood() {//随机一个新的食物
-	int r = rand() % ((WIDTH - 2) * (HEIGHT - 2) - size);
+	int r = rand() % ((WIDTH - 2) * (HEIGHT - 2) - snakeLength);
 	short *p;
-	p = map[0];
+	p = grid[0];
 
 	while (r >= 0) {
 		if (*p == 0)
