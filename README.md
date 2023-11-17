@@ -5,7 +5,20 @@
 正在开发(练习)的功能 自动蛇 (AI)
 
 这是一个使用SDL2制作的经典小游戏 贪吃蛇 添加了自动寻路(ai)功能
-构建环境:VS2017
+构建环境:CMAKE
+
+## 食用方法
+
+```shell
+git clone https://github.com/czstara12/PathFinderSnake-SDL2.git  --recurse-submodules
+cd PathFinderSnake-SDL2
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+生成的程序在build目录或者build\Debug目录下 直接运行即可
 
 切换手动/AI模式请把main.cpp中 gamewithai()换成game() 并把//MessageBox(NULL, "game over", "game over", MB_OK);前面的"//"去掉
 
