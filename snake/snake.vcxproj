@@ -159,9 +159,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AI.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="snake.cpp" />
+    <ClCompile Include="AI.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="snake.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />

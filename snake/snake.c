@@ -8,8 +8,8 @@ short snakeHeadPosition_x, snakeHeadPosition_y;                     // 蛇头位
 clock_t lastLoopTime;                   // 时间标记
 SDL_Renderer *renderer;//刷子
 SDL_Rect rect;//框子
-bool end = false;
-bool quit = false;
+BOOL end = FALSE;
+BOOL quit = FALSE;
 SDL_Event event;//事件
 SDL_Window * window;
 int stepsSinceLastFood = 0;//防止死循环
@@ -60,25 +60,25 @@ int gamewithai()
 		if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y - 1) == 1)
 			snakeHeadPosition_y = snakeHeadPosition_y - 1;
 		else
-			end = true;
+			end = TRUE;
 		break;
 	case d_down:
 		if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y + 1) == 1)
 			snakeHeadPosition_y = snakeHeadPosition_y + 1;
 		else
-			end = true;
+			end = TRUE;
 		break;
 	case d_left:
 		if (moveSnake(snakeHeadPosition_x - 1, snakeHeadPosition_y) == 1)
 			snakeHeadPosition_x = snakeHeadPosition_x - 1;
 		else
-			end = true;
+			end = TRUE;
 		break;
 	case d_right:
 		if (moveSnake(snakeHeadPosition_x + 1, snakeHeadPosition_y) == 1)
 			snakeHeadPosition_x = snakeHeadPosition_x + 1;
 		else
-			end = true;
+			end = TRUE;
 		break;
 	}
 	if (end)return 0;
@@ -92,7 +92,7 @@ int gamewithai()
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			quit = true;
+			quit = TRUE;
 			break;
 		}
 	if (quit)
@@ -109,25 +109,25 @@ int gameLoop()
 			if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y - 1) == 1)
 				snakeHeadPosition_y = snakeHeadPosition_y - 1;
 			else
-				end = true;
+				end = TRUE;
 			break;
 		case d_down:
 			if (moveSnake(snakeHeadPosition_x, snakeHeadPosition_y + 1) == 1)
 				snakeHeadPosition_y = snakeHeadPosition_y + 1;
 			else
-				end = true;
+				end = TRUE;
 			break;
 		case d_left:
 			if (moveSnake(snakeHeadPosition_x - 1, snakeHeadPosition_y) == 1)
 				snakeHeadPosition_x = snakeHeadPosition_x - 1;
 			else
-				end = true;
+				end = TRUE;
 			break;
 		case d_right:
 			if (moveSnake(snakeHeadPosition_x + 1, snakeHeadPosition_y) == 1)
 				snakeHeadPosition_x = snakeHeadPosition_x + 1;
 			else
-				end = true;
+				end = TRUE;
 			break;
 		}
 		if (end)return 0;
@@ -161,7 +161,7 @@ int gameLoop()
 			}
 			break;
 		case SDL_QUIT:
-			quit = true;
+			quit = TRUE;
 			break;
 		}
 	if (quit)
@@ -222,7 +222,7 @@ void display() {
 				SDL_RenderFillRect(renderer, &rect);
 				if (a < 1 || b < 1)
 				{
-					std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
+					//std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
 					exit(-1);
 				}
 				if (abs(grid[a - 1][b] - grid[a][b]) == 1 && grid[a - 1][b] != 0) {
@@ -273,10 +273,10 @@ void displayt()
 	system("cls");
 	for (int a = 0; a < HEIGHT; a++) {
 		for (int b = 0; b < WIDTH; b++) {
-			std::cout.width(4);
-			std::cout << grid[a][b];
+			//std::cout.width(4);
+			//std::cout << grid[a][b];
 		}
-		std::cout << std::endl << std::endl;
+		//std::cout << std::endl << std::endl;
 	}
 	Sleep(10);
 }

@@ -44,68 +44,68 @@ Direction ai(short const grid[][WIDTH]//地图
 	DFSmap * pb;
 	for (pa = grid[0], pb = dmap[0]; pb <= &dmap[HEIGHT - 1][WIDTH - 1]; pa++, pb++)
 	{
-		pb->active = pb->d = pb->nopen = pb->s = pb->sign = pb->w = pb->a = false;
+		pb->active = pb->d = pb->nopen = pb->s = pb->sign = pb->w = pb->a = FALSE;
 		if (*pa != 0)
 			if (*pa == -1)
 			{
-				pb->active = true;
-				pb->sign = true;
+				pb->active = TRUE;
+				pb->sign = TRUE;
 			}
 			else if (*pa == snakeLength)
 			{
 				p_start = pb;
-				pb->nopen = false;
+				pb->nopen = FALSE;
 			}
 			else if (qiantao == 1 && *pa == 1) {
-				pb->nopen = false;
-				pb->active = true;
-				pb->sign = true;
+				pb->nopen = FALSE;
+				pb->active = TRUE;
+				pb->sign = TRUE;
 			}
 			else
-				pb->nopen = true;
+				pb->nopen = TRUE;
 	}
 
 	int num = 1;
 	if (p_start == NULL)
 	{
-		std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
+		//std::cerr << "错误" << __FILE__ << __LINE__ << __FUNCTION__ << std::endl;
 		exit(-1);
 	}
-	while (p_start->sign == false && num != 0)
+	while (p_start->sign == FALSE && num != 0)
 	{
 		num = 0;
 		DFSmap * pdmap;
 		for (pdmap = &dmap[0][0]; pdmap <= &dmap[HEIGHT - 1][WIDTH - 1]; pdmap++)
 		{
-			if (pdmap->active == true)
+			if (pdmap->active == TRUE)
 			{
 				num++;
-				if ((pdmap - WIDTH)->nopen == false)
-					if ((pdmap - WIDTH)->sign == false)
+				if ((pdmap - WIDTH)->nopen == FALSE)
+					if ((pdmap - WIDTH)->sign == FALSE)
 					{
-						(pdmap - WIDTH)->s = true;
-						(pdmap - WIDTH)->active = true;
+						(pdmap - WIDTH)->s = TRUE;
+						(pdmap - WIDTH)->active = TRUE;
 					}
-				if ((pdmap - 1)->nopen == false)
-					if ((pdmap - 1)->sign == false)
+				if ((pdmap - 1)->nopen == FALSE)
+					if ((pdmap - 1)->sign == FALSE)
 					{
-						(pdmap - 1)->d = true;
-						(pdmap - 1)->active = true;
+						(pdmap - 1)->d = TRUE;
+						(pdmap - 1)->active = TRUE;
 					}
-				if ((pdmap + 1)->nopen == false)
-					if ((pdmap + 1)->sign == false)
+				if ((pdmap + 1)->nopen == FALSE)
+					if ((pdmap + 1)->sign == FALSE)
 					{
-						(pdmap + 1)->a = true;
-						(pdmap + 1)->active = true;
+						(pdmap + 1)->a = TRUE;
+						(pdmap + 1)->active = TRUE;
 					}
-				if ((pdmap + WIDTH)->nopen == false)
-					if ((pdmap + WIDTH)->sign == false)
+				if ((pdmap + WIDTH)->nopen == FALSE)
+					if ((pdmap + WIDTH)->sign == FALSE)
 					{
-						(pdmap + WIDTH)->w = true;
-						(pdmap + WIDTH)->active = true;
+						(pdmap + WIDTH)->w = TRUE;
+						(pdmap + WIDTH)->active = TRUE;
 					}
-				pdmap->active = false;
-				pdmap->sign = true;
+				pdmap->active = FALSE;
+				pdmap->sign = TRUE;
 			}
 		}
 	}
@@ -116,25 +116,25 @@ Direction ai(short const grid[][WIDTH]//地图
 	//}
 	//else if (qiantao == 1)
 	//{
-	//	if (p_start->w == true)return d_up;
-	//	else if (p_start->a == true)return d_left;
-	//	else if (p_start->s == true)return d_down;
-	//	else if (p_start->d == true)return d_right;
+	//	if (p_start->w == TRUE)return d_up;
+	//	else if (p_start->a == TRUE)return d_left;
+	//	else if (p_start->s == TRUE)return d_down;
+	//	else if (p_start->d == TRUE)return d_right;
 	//}
 	//else if (simulate(grid, p_start, snakeLength, x, y) == 0)
 	//	MessageBox(NULL, "没路了2", "error", MB_OK);
 	//else
-	//	if (p_start->w == true)return d_up;
-	//	else if (p_start->a == true)return d_left;
-	//	else if (p_start->s == true)return d_down;
-	//	else if (p_start->d == true)return d_right;
+	//	if (p_start->w == TRUE)return d_up;
+	//	else if (p_start->a == TRUE)return d_left;
+	//	else if (p_start->s == TRUE)return d_down;
+	//	else if (p_start->d == TRUE)return d_right;
 
 	if (qiantao == 1 || qiantao == 2)//模拟函数用来判断模拟情况 防止反复归递
 	{
-		if (p_start->w == true)return d_up;
-		else if (p_start->a == true)return d_left;
-		else if (p_start->s == true)return d_down;
-		else if (p_start->d == true)return d_right;
+		if (p_start->w == TRUE)return d_up;
+		else if (p_start->a == TRUE)return d_left;
+		else if (p_start->s == TRUE)return d_down;
+		else if (p_start->d == TRUE)return d_right;
 	}
 	else if (num == 0) {//没有搜索到直接路径 食物生成在蛇圈以外
 		return ai2(grid, snakeLength, x, y);
@@ -145,10 +145,10 @@ Direction ai(short const grid[][WIDTH]//地图
 		return ai2(grid, snakeLength, x, y);
 	}
 	else//剩的就是既能找到又安全的路了
-		if (p_start->w == true)return d_up;
-		else if (p_start->a == true)return d_left;
-		else if (p_start->s == true)return d_down;
-		else if (p_start->d == true)return d_right;
+		if (p_start->w == TRUE)return d_up;
+		else if (p_start->a == TRUE)return d_left;
+		else if (p_start->s == TRUE)return d_down;
+		else if (p_start->d == TRUE)return d_right;
 
 	return d_error;
 }
@@ -166,22 +166,22 @@ int simulate(const short grid[][WIDTH]
 	short * pv = &vir_map[y][x];
 	while (1)
 	{
-		if (pn->w == true)
+		if (pn->w == TRUE)
 		{
 			pn -= WIDTH;
 			pv -= WIDTH;
 		}
-		else if (pn->a == true)
+		else if (pn->a == TRUE)
 		{
 			pn -= 1;
 			pv -= 1;
 		}
-		else if (pn->s == true)
+		else if (pn->s == TRUE)
 		{
 			pn += WIDTH;
 			pv += WIDTH;
 		}
-		else if (pn->d == true)
+		else if (pn->d == TRUE)
 		{
 			pn += 1;
 			pv += 1;

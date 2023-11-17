@@ -4,12 +4,12 @@
 
 #include "public.h"
 #include <stdlib.h>
-#include <iostream>
+#include <wtypes.h>
 
-struct DFSmap
+typedef struct DFSmap
 {
-	bool w, s, a, d, sign, active, nopen;
-};
+	BOOL w, s, a, d, sign, active, nopen;
+}DFSmap;
 Direction ai(short const grid[][WIDTH]//地图
 	,short size//蛇长
 	,short x,short y
