@@ -1,4 +1,4 @@
-# snake
+# PathFinderSnake 寻路蛇
 
 使用了SDL图形库 wsad操控方向
 
@@ -8,6 +8,7 @@
 构建环境:VS2017
 
 切换手动/AI模式请把main.cpp中 gamewithai()换成game() 并把//MessageBox(NULL, "game over", "game over", MB_OK);前面的"//"去掉
+
 ```c
 int main(int argc, char* args[]) {
 	initialize();
@@ -19,14 +20,17 @@ int main(int argc, char* args[]) {
 ```
 
 修改长和宽请修改snake.h中的(长宽包括四周的边框 比如下面的代码中 舍得活动空间只有中间的28*28)
+
 ```c
 #define WIDTH 30
 #define HEIGHT 30//长宽
 ```
+
 两项
 蛇的储存结构 二维数组 -2表示墙 -1表示食物 0表示啥都没有 其他正数表示蛇的节数
 每次前进在前进的方向上的位置赋值为蛇的长度+1 然后遍历二维数组 将所有蛇身的数字-1 -2,-1,0保持不变
 如下
+
 ```c
 int move(int x, int y) {//蛇头向前进一个格
 	diren = dire;
@@ -47,6 +51,7 @@ int move(int x, int y) {//蛇头向前进一个格
 	return 1;
 }
 ```
+
 snake.cpp中display()函数处可以修改配色
 AI.cpp可以修改ai逻辑
 代码写的可能不好看 ai运行到最后会剩下几个格 求大佬指点更强的寻路算法
