@@ -2,9 +2,11 @@
 #include <Windows.h>
 #include <SDL.h>
 
-int main(int argc, char* args[]) {
+int main(int argc, char *args[])
+{
 	initialize();
-	while (gamewithai());
+	while (gamewithai())
+		;
 	MessageBoxA(NULL, "game over", "game over", MB_OK);
 	SDL_Quit();
 	return 0;
