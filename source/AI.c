@@ -202,7 +202,7 @@ int simulate(const short grid[][WIDTH], DFSmap *p_start, short snakeLength, shor
 		{
 			*pv = snakeLength + 1;
 			for (int a = 0; a < HEIGHT; a++)
-				for (int b = 0; b < HEIGHT; b++)
+				for (int b = 0; b < WIDTH; b++)
 					vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
 		}
 		else
@@ -336,7 +336,7 @@ int simulate2(const short grid[][WIDTH], DFSmap *p_start, short snakeLength, sho
 		{
 			vir_map[y][x] = snakeLength + 1;
 			for (int a = 0; a < HEIGHT; a++)
-				for (int b = 0; b < HEIGHT; b++)
+				for (int b = 0; b < WIDTH; b++)
 					vir_map[a][b] = (vir_map[a][b] > 0 ? vir_map[a][b] - 1 : vir_map[a][b]);
 		}
 		else if (vir_map[y][x] == -1)
