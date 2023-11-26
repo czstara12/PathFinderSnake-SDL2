@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef PUBLIC_H
 #define PUBLIC_H
 

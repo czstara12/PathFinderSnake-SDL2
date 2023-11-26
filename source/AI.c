@@ -1,4 +1,4 @@
-﻿#include "AI.h"
+#include "AI.h"
 
 Direction ai(short const grid[][WIDTH], // 地图
 			 short snakeLength,			// 蛇长
