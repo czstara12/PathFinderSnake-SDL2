@@ -1,11 +1,12 @@
-/*
- * @Author: starstory czstara12@gmail.com
- * @Date: 2023-11-25 21:35:57
- * @LastEditors: starstory czstara12@gmail.com
- * @LastEditTime: 2023-11-25 23:06:38
- * @FilePath: \PathFinderSnake-SDL2\source\main.h
- * @Description: main头文件
+/**
+ * @file main.h
+ * @author starstory
+ * @brief 包含主函数需要的头文件和类
+ * @version 0.1
+ * @date 2023-11-26
+ *
+ * @copyright MIT 2023
+ *
  */
 #include "snake.h"
-#include <SDL.h>
-#include <Windows.h>
+#include "draw.h"

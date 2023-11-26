@@ -16,9 +16,15 @@ else()
     find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 endif()
 
+# 搜索源文件
+aux_source_directory(source DIR_SRCS)
+
+# 指定生成目标
+add_executable(mygame ${DIR_SRCS})
+
 # Create your game executable target as usual
 # add_executable(mygame WIN32 source/snake.c source/AI.c source/main.c)
-add_executable(mygame source/snake.c source/main.c)
+# add_executable(mygame source/snake.c source/main.c)
 
 # SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
 if(TARGET SDL2::SDL2main)
