@@ -1,5 +1,11 @@
 #include "stack.h"
 
+/**
+ * @brief 初始化
+ *
+ * @param init
+ * @return int
+ */
 int stackinit(stack *init)
 {
 	init->size = defaultStackSize;
@@ -7,6 +13,13 @@ int stackinit(stack *init)
 	init->launth = 0;
 	return 0;
 }
+
+/**
+ * @brief 压栈
+ *
+ * @param ps
+ * @param data
+ */
 void push(stack *ps, stackType data)
 {
 	if (ps->launth == ps->size)
@@ -15,8 +28,7 @@ void push(stack *ps, stackType data)
 		stackType *tmp;
 		if ((tmp = (stackType *)malloc(sizeof(stackType) * ps->size)) == NULL)
 		{
-			exit(1);
-			return;
+			assert(0);
 		}
 		stackType *a = ps->base;
 		stackType *b = tmp;
@@ -34,8 +46,31 @@ void push(stack *ps, stackType data)
 	ps->top++;
 	ps->launth++;
 }
+
+/**
+ * @brief 弹出
+ *
+ * @param ps
+ * @return stackType
+ */
 stackType pop(stack *ps)
 {
+	if (ps->launth == 0)
+	{
+		return NULL;
+	}
 	ps->top--;
+	ps->launth--;
 	return *(ps->top);
+}
+
+/**
+ * @brief 销毁队列
+ *
+ */
+void stackdestroy(stack *ps)
+{
+	free(ps->base);
+	ps->base = ps->top = NULL;
+	ps->launth = 0;
 }

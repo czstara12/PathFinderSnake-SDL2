@@ -4,13 +4,8 @@
  * @brief 队列的头文件
  * @details 队列的头文件，包含队列的结构体和函数的声明
  */
-
-/**
- * @file queue.h
- * @brief 队列的头文件
- * @details 队列的头文件，包含队列的结构体和函数的声明
- */
 #include "list.h"
+#include <assert.h>
 
 /**
  * @brief 队列的数据类型
@@ -33,3 +28,4 @@ queue *initQueue(queue *q);
 queue *pushQueue(queue *q, queueType data);
 queue *popQueue(queue *q, queueType *data);
 void destroyqueue(queue *q);
+queueType quickPopQueue(queue *q);

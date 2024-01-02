@@ -1,9 +1,10 @@
 #pragma once
 #include <malloc.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define defaultStackSize 16
-typedef int stackType;
+typedef void *stackType;
 typedef struct
 {
 	stackType *base; ///< 栈首
@@ -15,3 +16,4 @@ typedef struct
 int stackinit(stack *init);
 void push(stack *ps, stackType data);
 stackType pop(stack *ps);
+void stackdestroy(stack *ps);

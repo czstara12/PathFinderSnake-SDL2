@@ -26,3 +26,7 @@ typedef struct drawClass
     SDL_Event event;        ///< 事件
     SDL_Window *window;     ///< 窗口
 } drawClass;
+
+void SDL_GameDisplay(drawClass *window, gameInfo *pGame);
+void SDL_GameEvent(drawClass *window, gameInfo *pGame);
+void drawInit(drawClass *window);

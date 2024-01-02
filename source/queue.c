@@ -16,13 +16,23 @@ queue *initQueue(queue *q)
 	if (q == NULL)
 		return NULL;
 
-	if ((q->head = q->back = (listNode *)malloc(sizeof(listNode))) == NULL)
+	if ((q->head = (listNode *)malloc(sizeof(listNode))) == NULL)
 	{
 		return NULL; // 在此返回错误信息 申请内存失败
 	}
 
+	if ((q->back = (listNode *)malloc(sizeof(listNode))) == NULL)
+	{
+		return NULL; // 在此返回错误信息 申请内存失败
+	}
 	q->count = 0;
+
+	q->head->next = q->back;
+	q->head->data = 0;
+
 	q->back->next = NULL;
+	q->back->data = 0;
+
 	return q;
 }
 
@@ -34,11 +44,13 @@ queue *initQueue(queue *q)
  */
 queue *pushQueue(queue *q, queueType data)
 {
-	if (q == NULL)
-		return NULL;
+	// if (q == NULL)
+	// 	return NULL;
 
-	if (instertListNode(q->back, data) == NULL)
-		return NULL; // 在此返回错误信息 申请内存失败
+	assert(q);
+	q->back->data = data;
+	assert(instertListNode(q->back, 0));
+	// return NULL; // 在此返回错误信息 申请内存失败
 	q->back = q->back->next;
 	q->count++;
 	return q;
@@ -91,4 +103,5 @@ void destroyqueue(queue *q)
 	while (q->count > 0)
 		popQueue(q, &data);
 	free(q->head);
+	free(q->back);
 }

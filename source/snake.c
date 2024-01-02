@@ -63,6 +63,7 @@ void newfood(struct gameInfo *pGame)
 			if (r == 0)
 			{
 				*p = FOOD;
+				pGame->pFood = p;
 				break;
 			}
 			else
@@ -76,7 +77,7 @@ void newfood(struct gameInfo *pGame)
  * @brief 在终端中绘制
  * @param pGame 游戏信息
  */
-void display(struct gameInfo *pGame)
+void displayOnTerminal(struct gameInfo *pGame)
 {
 	system("cls");
 	for (int i = 0; i < HEIGHT; i++)
@@ -149,10 +150,18 @@ int gameLoop(struct gameInfo *pGame)
 	case RIGHT:
 	case UP:
 	case DOWN:
+		if (*(pGame->pSnakeHead + pGame->headDirection) == *(pGame->pSnakeTail))
+		{
+			*(pGame->pSnakeHead + pGame->headDirection) = HEAD;
+			*pGame->pSnakeHead = pGame->headDirection;
+			pGame->pSnakeTail = pGame->pSnakeTail + *(pGame->pSnakeTail);
+			pGame->pSnakeHead = pGame->pSnakeHead + pGame->headDirection;
+			break;
+		}
 		// TODO:游戏终止
 		break;
 	case HEAD: // 这不可能
-		exit(-1);
+		assert(0);
 		break;
 	}
 	return 0;
@@ -162,7 +171,7 @@ int gameLoop(struct gameInfo *pGame)
  * @brief 获取输入
  * @param pGame 游戏信息
  */
-void gameEvent(struct gameInfo *pGame)
+void gameEventFromTerminal(struct gameInfo *pGame)
 {
 	// 获取输入
 	if (_kbhit())
@@ -194,7 +203,7 @@ void gameEvent(struct gameInfo *pGame)
 				pGame->headDirection = RIGHT;
 			break;
 		case 'q':
-			return 0;
+			// TODO: 退出游戏
 			break;
 		}
 

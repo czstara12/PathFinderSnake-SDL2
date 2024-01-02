@@ -10,13 +10,16 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <assert.h>
 
 #define WIDTH 32
 #define HEIGHT 32
 
 /**
  * @brief 方向枚举
- * @details 用于标记蛇头的方向
+ * @details 用于标记蛇节的方向
  */
 enum
 {
@@ -36,16 +39,16 @@ enum
  */
 typedef struct gameInfo
 {
-	char grid[HEIGHT][WIDTH];	   ///< 地图
-	short snakeLength;			   ///< 蛇的长度
-	clock_t lastLoopTime;		   ///< 标记时间
-	char *pSnakeHead, *pSnakeTail; ///< 蛇头和蛇尾
-	char headDirection;			   ///< 蛇头方向
+	char grid[HEIGHT][WIDTH];			   ///< 地图
+	short snakeLength;					   ///< 蛇的长度
+	clock_t lastLoopTime;				   ///< 标记时间
+	char *pSnakeHead, *pSnakeTail, *pFood; ///< 蛇头和蛇尾
+	char headDirection;					   ///< 蛇头方向
 } gameInfo;
 
 int gameInit(struct gameInfo *game);
 int gameLoop(struct gameInfo *game);
 void newfood(struct gameInfo *pGame);
-void gameEvent(struct gameInfo *pGame);
-void display(struct gameInfo *pGame);
+void gameEventFromTerminal(struct gameInfo *pGame);
+void displayOnTerminal(struct gameInfo *pGame);
 #endif
