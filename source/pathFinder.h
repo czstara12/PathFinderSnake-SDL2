@@ -13,12 +13,16 @@
 #define AI_H
 
 #include "snake.h"
+#include "dfs.h"
+#include "bfs.h"
+#include <string.h>
 
-typedef struct node
-{
-    struct node *parent;
-    int x, y;
-    float cost;
-} node;
+// typedef struct node
+// {
+//     struct node *parent;
+//     int x, y;
+//     float cost;
+// } node;
+void plan(gameInfo *pGame);
 
 #endif // !AI_H

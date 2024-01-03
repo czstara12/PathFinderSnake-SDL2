@@ -146,6 +146,7 @@ int gameLoop(struct gameInfo *pGame)
 		pGame->pSnakeTail = pGame->pSnakeTail + temp;
 		break;
 	case WALL:
+		break;
 	case LEFT:
 	case RIGHT:
 	case UP:

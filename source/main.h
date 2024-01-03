@@ -10,5 +10,4 @@
  */
 #include "snake.h"
 #include "draw.h"
-#include "dfs.h"
-#include "bfs.h"
+#include "pathFinder.h"

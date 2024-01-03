@@ -21,7 +21,7 @@ int depthFirstSearch(gameInfo *info, char *start, char *end)
     {
         char *current = (char *)pop(&pathStack);
 
-        // 检查是否到达食物
+        // 检查是否到达终点
         if (current == end)
         {
             // 追踪回蛇头，找到第一步的方向
